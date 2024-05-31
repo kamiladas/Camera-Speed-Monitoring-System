@@ -51,6 +51,7 @@ def perform_object_detection(sess, detection_graph, frame):
 ```
 
 #### Drawing Detection Areas
+![image](https://github.com/kamiladas/Camera-Speed-Monitoring-System/assets/58427794/d8df9929-65f1-47d1-b4b7-20235421f111)
 
 The project defines the area for vehicle detection as the section between two measurement points, i.e., the cameras. Processing the image within this designated area allows not only vehicle detection but also speed measurement and monitoring road behavior.
 
@@ -74,6 +75,7 @@ def process_frame_cam1(frame1, point1, point2):
 The function `calculate_speed` calculates the vehicle's speed as the ratio of the distance traveled to the time taken. This method's accuracy depends on the precision of time measurement and the consistency of the distance between the cameras.
 
 #### License Plate Recognition
+![image](https://github.com/kamiladas/Camera-Speed-Monitoring-System/assets/58427794/4d0d7b3f-df7a-4e6c-b0f0-aa7d53eeec38)
 
 License plate recognition is a critical component of advanced traffic monitoring systems. In this project, the functionality is implemented by the functions `plate_detect` and `read_plate_process`, which work together to detect and read license plates.
 
@@ -100,6 +102,8 @@ def detect_collision(detected_pixels, line_point1, line_point2, margin=-10):
 EasyOCR is used to read and process text from detected license plates.
 
 ## User Interface (GUI)
+
+
 
 The graphical user interface (GUI) is designed to be intuitive and user-friendly, providing access to all important system functions, including video display from cameras, vehicle detection, speed reading, and license plate identification.
 
