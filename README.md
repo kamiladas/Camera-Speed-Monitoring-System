@@ -105,6 +105,7 @@ def detect_collision(detected_pixels, line_point1, line_point2, margin=-10):
 EasyOCR is used to read and process text from detected license plates.
 
 ## User Interface (GUI)
+![image](https://github.com/kamiladas/Camera-Speed-Monitoring-System/assets/58427794/d0cfb055-b949-4e2e-8aa2-7447da2b333e)
 
 
 
