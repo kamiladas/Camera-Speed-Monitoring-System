@@ -126,6 +126,14 @@ The graphical user interface (GUI) is designed to be intuitive and user-friendly
 - **License Plate Recognition**: Using OCR techniques to read and process license plate information.
 - **Violation Log**: Documenting and tracking traffic violations.
 
+##Sysstem Example
+
+
+https://github.com/kamiladas/Camera-Speed-Monitoring-System/assets/58427794/cffda54f-734d-4c54-bf8a-658fe1f0619b
+
+
+
+
 ## Conclusion
 
 This project represents a significant step towards using AI in monitoring and managing road traffic. It offers possibilities for improving road safety and opens new avenues for analyzing traffic data and developing intelligent transportation systems.
