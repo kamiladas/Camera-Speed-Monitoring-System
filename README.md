@@ -19,7 +19,7 @@ The project consists of several key components, including vehicle detection, spe
 
 ### Machine Learning Model
 
-The project uses an advanced machine learning model for real-time vehicle detection. This model is based on deep neural networks, which are specifically trained to identify vehicles in various lighting and environmental conditions. Common architectures such as YOLO (You Only Look Once), SSD (Single Shot MultiBox Detector), or Faster R-CNN are typically used for object detection tasks.
+The project uses an advanced machine learning model for real-time vehicle detection. This model is based on deep neural networks, which are specifically trained to identify vehicles in various lighting and environmental conditions. Common architectures such as YOLO (You Only Look Once), SSD (Single Shot MultiBox Detector), Faster R-CNN  typically used for object detection tasks.
 
 ### Key Functions
 
