@@ -76,7 +76,9 @@ def process_frame_cam1(frame1, point1, point2):
 The function `calculate_speed` calculates the vehicle's speed as the ratio of the distance traveled to the time taken. This method's accuracy depends on the precision of time measurement and the consistency of the distance between the cameras.
 
 #### License Plate Recognition
-![image](https://github.com/kamiladas/Camera-Speed-Monitoring-System/assets/58427794/4d0d7b3f-df7a-4e6c-b0f0-aa7d53eeec38)
+![image](https://github.com/kamiladas/Camera-Speed-Monitoring-System/assets/58427794/4d0d7b3f-df7a-4e6c-b0f0-aa7d53eeec38) ![image](https://github.com/kamiladas/Camera-Speed-Monitoring-System/assets/58427794/ff77acbb-fd21-440f-9995-dcbc8aebdfc4)
+
+
 
 License plate recognition is a critical component of advanced traffic monitoring systems. In this project, the functionality is implemented by the functions `plate_detect` and `read_plate_process`, which work together to detect and read license plates.
 
