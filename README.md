@@ -51,7 +51,8 @@ def perform_object_detection(sess, detection_graph, frame):
 ```
 
 #### Drawing Detection Areas
-![image](https://github.com/kamiladas/Camera-Speed-Monitoring-System/assets/58427794/d8df9929-65f1-47d1-b4b7-20235421f111)
+![image](https://github.com/kamiladas/Camera-Speed-Monitoring-System/assets/58427794/29f7d48e-d8a0-4edd-81a7-2c982b154390)
+
 
 The project defines the area for vehicle detection as the section between two measurement points, i.e., the cameras. Processing the image within this designated area allows not only vehicle detection but also speed measurement and monitoring road behavior.
 
