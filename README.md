@@ -71,6 +71,7 @@ def process_frame_cam1(frame1, point1, point2):
 ```
 
 #### Speed Measurement
+![image](https://github.com/kamiladas/Camera-Speed-Monitoring-System/assets/58427794/5e7ef420-3e4c-4293-a887-3ab5b51d776d)
 
 The function `calculate_speed` calculates the vehicle's speed as the ratio of the distance traveled to the time taken. This method's accuracy depends on the precision of time measurement and the consistency of the distance between the cameras.
 
