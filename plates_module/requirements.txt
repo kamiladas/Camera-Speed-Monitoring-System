@@ -1,0 +1,165 @@
+import cv2
+import os
+import re
+import time
+import threading
+import subprocess
+import shutil
+
+# Adres URL kamery IP
+camera_url = "http://192.168.3.100:8080/video"
+
+# Funkcja do odczytu tablicy rejestracyjnej z obrazu
+def read_license_plate(image):
+    # Konwersja obrazu na odcienie szarości
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    # Odszumianie obrazu za pomocą metody filtra Gaussian
+    denoised = cv2.GaussianBlur(gray, (3, 3), 0)
+
+    # Wykrywanie konturów na obrazie
+    contours, _ = cv2.findContours(denoised, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    # Wybór największego konturu (zakładając, że jest to tablica rejestracyjna)
+    largest_contour = max(contours, key=cv2.contourArea)
+
+    # Wycięcie obszaru tablicy rejestracyjnej z obrazu na podstawie konturu
+    (x, y, w, h) = cv2.boundingRect(largest_contour)
+    plate_image = image[y:y + h, x:x + w]
+
+    return plate_image
+
+
+# Funkcja do detekcji i wycięcia obszaru tablicy rejestracyjnej
+def detect_license_plate(image):
+    # Wczytanie pliku XML z modelem detekcji Haara
+    cascade_path = "haarcascade_russian_plate_number.xml"
+    cascade = cv2.CascadeClassifier(cascade_path)
+
+    # Konwersja obrazu na odcienie szarości
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    # Detekcja tablic rejestracyjnych
+    plates = cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5, minSize=(100, 100))
+
+    # Jeśli wykryto jakąś tablicę rejestracyjną
+    if len(plates) > 0:
+        # Wybierz pierwszą tablicę rejestracyjną
+        (x, y, w, h) = plates[0]
+
+        # Wycięcie obszaru tablicy rejestracyjnej z obrazu
+        plate_image = image[y:y + h, x:x + w]
+
+        return plate_image
+
+    return None
+
+
+# Funkcja do wyświetlania wideo na żywo
+def display_video():
+ 
+    # Tworzenie obiektu VideoCapture dla kamery IP
+    cap = cv2.VideoCapture(camera_url)
+
+    # Sprawdzenie, czy kamera jest prawidłowo podłączona
+    if not cap.isOpened():
+        print("Błąd podczas łączenia z kamerą.")
+        exit()
+
+    # Szerokość obrazu wyświetlanego na ekranie
+    display_width = 800
+
+    # Pętla wyświetlająca wideo na żywo
+    while True:
+        # Odczyt obrazu z kamery
+        ret, frame = cap.read()
+
+        if ret:
+            # Skalowanie obrazu
+            frame = cv2.resize(frame, (display_width, int(frame.shape[0] * display_width / frame.shape[1])))
+
+            # Wyświetlenie obrazu na żywo
+            cv2.imshow("Kamera", frame)
+
+        # Warunek zakończenia pętli po naciśnięciu klawisza 'q'
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+    # Zwolnienie zasobów kamery
+    cap.release()
+    cv2.destroyAllWindows()
+
+
+# Funkcja do wykonywania zdjęć
+def capture_photos():
+    # Utworzenie foldera dla przechowywania zdjęć
+    output_dir = "license_plates"
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Licznik wykonanych zdjęć
+    photo_count = 0
+
+    # Tworzenie obiektu VideoCapture dla kamery IP
+    cap = cv2.VideoCapture(camera_url)
+
+    # Sprawdzenie, czy kamera jest prawidłowo podłączona
+    if not cap.isOpened():
+        print("Błąd podczas łączenia z kamerą.")
+        exit()
+
+    # Pętla wykonywania zdjęć
+    while True:
+        # Odczyt obrazu z kamery
+        ret, frame = cap.read()
+
+        if ret:
+            # Wywołanie funkcji do detekcji tablicy rejestracyjnej
+            plate_image = detect_license_plate(frame)
+
+            # Jeśli tablica rejestracyjna została wykryta
+            if plate_image is not None:
+                # Zapis zdjęcia tablicy rejestracyjnej do pliku
+                photo_count += 1
+                filename = f"plate{photo_count}.jpg"
+                filepath = os.path.join(output_dir, filename)
+                cv2.imwrite(filepath, plate_image)
+
+                print(f"Zapisano zdjęcie {filename}")
+
+                # Sprawdzenie warunku zakończenia pętli po zrobieniu 50 zdjęć
+                if photo_count >= 50:
+                    subprocess.run(["python", "./read.py"])
+                    print("Oczekiwanie 3 sekund...")
+                    for i in range(3, 0, -1):
+                        print(f"Odliczanie: {i} sekundy")
+                        time.sleep(1)
+                    photo_count = 0  # Zresetowanie licznika zdjęć
+
+                    # Opróżnienie foldera license_plates
+                    shutil.rmtree("license_plates")
+                    os.makedirs("license_plates", exist_ok=True)
+                    
+                    # Wywołanie skryptu read.py
+                    subprocess.run(["python", "read.py"])
+
+
+
+        # Warunek zakończenia pętli po naciśnięciu klawisza 'q'
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+    # Zwolnienie zasobów kamery
+    cap.release()
+
+
+# Utworzenie wątków dla funkcji display_video() i capture_photos()
+video_thread = threading.Thread(target=display_video)
+photo_thread = threading.Thread(target=capture_photos)
+
+# Uruchomienie wątków
+video_thread.start()
+photo_thread.start()
+
+# Oczekiwanie na zakończenie wątków
+video_thread.join()
+photo_thread.join()
