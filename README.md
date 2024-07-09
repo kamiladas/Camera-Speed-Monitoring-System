@@ -137,3 +137,8 @@ https://github.com/kamiladas/Camera-Speed-Monitoring-System/assets/58427794/cffd
 ## Conclusion
 
 This project represents a significant step towards using AI in monitoring and managing road traffic. It offers possibilities for improving road safety and opens new avenues for analyzing traffic data and developing intelligent transportation systems.
+
+
+© 2024 Kamil adas. All rights reserved.
+This project is for non-commercial use only.
+Commercial use of this design is prohibited without the prior consent of the author.
