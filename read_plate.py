@@ -19,7 +19,8 @@ best_result = {
 
 def process_image(image_id, iterations=1):
     # Zaktualizowana ścieżka, która teraz używa image_id
-    file_path = f"C:\\Users\\Adas\\OneDrive\\Desktop\\Projekt_Speed_detector\\detected_plates\\{image_id}.jpg"
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(current_dir, "{image_id}.jpg")
     
     if os.path.exists(file_path):
         for _ in range(iterations):

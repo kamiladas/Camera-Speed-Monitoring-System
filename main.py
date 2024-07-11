@@ -10,7 +10,6 @@ import os
 from plate_detect import detect_and_save_license_plates, recognize_license_plate
 from read_plate import process_image
 from time import sleep
-save_directory = "C:\\Users\\Adas\\OneDrive\\Desktop\\Projekt_Speed_detector\\detected_plates"
 distance=None
 speed_limit=None
 timer_c1=0
@@ -40,12 +39,18 @@ time_line2_crossed = None
 
 vehicles = {}
 
+current_dir = os.path.dirname(os.path.abspath(__file__))
 
-cap1 = cv2.VideoCapture('C:\\Users\\Adas\\OneDrive\\Desktop\\Projekt_Speed_detector\\video\\trafic_example2.mp4')
-cap2 = cv2.VideoCapture('C:\\Users\\Adas\\OneDrive\\Desktop\\Projekt_Speed_detector\\video\\trafic_example2.mp4')
+# Budowanie pełnych ścieżek do plików wideo i modelu
+video_file = os.path.join(current_dir, 'video', '50km_h_c2.mp4')
+frozen_graph_path = os.path.join(current_dir, 'ssd_mobilenet_v1_coco_2018_01_28', 'frozen_inference_graph.pb')
 
-PATH_TO_FROZEN_GRAPH = "C:/Users/Adas/OneDrive/Desktop/Projekt_Speed_detector/ssd_mobilenet_v1_coco_2018_01_28/frozen_inference_graph.pb"
+# Otwieranie plików wideo z użyciem OpenCV
+cap1 = cv2.VideoCapture(video_file)
+cap2 = cv2.VideoCapture(video_file)
 
+# Użycie ścieżki do zamrożonego grafu
+PATH_TO_FROZEN_GRAPH = frozen_graph_path
 
    
 
@@ -82,10 +87,11 @@ def detect_collision(detected_pixels, line_point1, line_point2, margin=-10):
 
 def save_frame(frame, frame_number):
     def save_frame_thread():
-        directory_path = "C:\\Users\\Adas\\OneDrive\\Desktop\\Projekt_Speed_detector\\screenshoots"
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        directory_path = os.path.join(current_dir, "screenshoots")
         filename = f"{frame_number}.jpg"
         filepath = os.path.join(directory_path, filename)
-        
+        os.makedirs(directory_path, exist_ok=True)
         cv2.imwrite(filepath, frame)
         print(f"Frame saved as {filepath}")
 
@@ -466,11 +472,14 @@ def start_processing():
     submit_button.pack()
 
 def plate_detect(vehicle_id):
-    base_path = "C:\\Users\\Adas\\OneDrive\\Desktop\\Projekt_Speed_detector\\screenshoots\\"
+    project_dir = os.path.dirname(os.path.abspath(__file__))
+        
+    # Utworzenie ścieżki do katalogu screenshoots w katalogu projektu
+    screenshoots_dir = os.path.join(project_dir, "screenshoots")
     image_filename = f"{vehicle_id}.JPG"
-    image_path = base_path + image_filename
+    image_path = screenshoots_dir + image_filename
 
-    save_directory = "C:\\Users\\Adas\\OneDrive\\Desktop\\Projekt_Speed_detector\\detected_plates"
+    save_directory = os.path.join(project_dir, "detected_plates")  
 
     # Definicja funkcji, która będzie uruchomiona w nowym wątku
     def process_and_save():
@@ -525,4 +534,3 @@ root.geometry(f"+{x_coordinate}+{y_coordinate}")
 # Uruchom pętlę główną
 root.mainloop()
 #process_video(cap1, cap2, detection_graph)
-
